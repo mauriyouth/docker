@@ -176,7 +176,10 @@ func InitContainer(c *Command) *configs.Config {
 	container.Readonlyfs = c.ReadonlyRootfs
 	container.Devices = c.AutoCreatedDevices
 	container.Rootfs = c.Rootfs
-	container.Readonlyfs = c.ReadonlyRootfs
+
+	if c.ReadonlyRootfs {
+		container.ReadonlyPaths = append(container.ReadonlyPaths, "/etc/hostname", "/etc/hosts", "etc/resolv.conf")
+	}
 
 	// check to see if we are running in ramdisk to disable pivot root
 	container.NoPivotRoot = os.Getenv("DOCKER_RAMDISK") != ""
